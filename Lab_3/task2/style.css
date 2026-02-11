@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: whitesmoke;
+    color: dimgrey;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.header {
+    background-color: black;
+    color: darkgrey;
+    padding: 16px;
+    text-align: center;
+    width: 100%;
+}
+
+/* main container – matches your .container idea */
+.main {
+    width: 500px;
+    margin: 24px auto;
+    background-color: white;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.todo-form {
+    margin-bottom: 24px;
+}
+
+.todo-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input input {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border 0.2s;
+}
+
+.input input:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+.btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    background-color: #357abd;
+}
+
+/* task list */
+.todo-list {
+    list-style: none;
+    margin-top: 8px;
+}
+
+.todo-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background 0.2s;
+}
+
+.todo-list li:hover {
+    background-color: #f0f4f8;
+}
+
+/* checkbox */
+.todo-list input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 16px;
+    cursor: pointer;
+    accent-color: #4a90e2;
+}
+
+/* task text */
+.task-text {
+    flex: 1;
+    font-size: 1.05rem;
+    color: #2c3e50;
+    word-break: break-word;
+}
+
+/* strikethrough when done */
+.completed .task-text {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+/* delete button */
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: 12px;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
