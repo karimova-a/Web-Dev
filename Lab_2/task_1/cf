@@ -1,0 +1,271 @@
+You need to update your `ProductListComponent` to use Angular signals and the new control flow syntax. Follow these steps carefully.
+
+---
+
+## Step 1: Modify `product-list.ts` (TypeScript)
+
+Open `src/app/components/product-list/product-list.ts` and replace its content with the code below. It adds signals for favorites, computed values, and methods.
+
+```typescript
+import { Component, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductCardComponent } from '../product-card/product-card';
+import { Product } from '../../models/product.model';
+
+@Component({
+  selector: 'app-product-list',
+  standalone: true,
+  imports: [CommonModule, ProductCardComponent],
+  templateUrl: './product-list.html',
+  styleUrls: ['./product-list.css']
+})
+export class ProductListComponent {
+  // Existing product array (make sure you have at least 10 products)
+  products: Product[] = [
+    // ... your products here (keep your existing array)
+  ];
+
+  // Signals for favorites
+  favoriteIds = signal<number[]>([]);          // stores IDs of favorite products
+  showFavoritesOnly = signal<boolean>(false);  // toggle view
+
+  // Computed signals
+  favoriteCount = computed(() => this.favoriteIds().length);
+
+  displayedProducts = computed(() => {
+    if (this.showFavoritesOnly()) {
+      return this.products.filter(p => this.favoriteIds().includes(p.id));
+    }
+    return this.products;
+  });
+
+  // Methods
+  toggleFavorite(productId: number) {
+    this.favoriteIds.update(currentIds => {
+      if (currentIds.includes(productId)) {
+        return currentIds.filter(id => id !== productId);
+      } else {
+        return [...currentIds, productId];
+      }
+    });
+  }
+
+  isFavorite(productId: number): boolean {
+    return this.favoriteIds().includes(productId);
+  }
+}
+```
+
+**Explanation**:
+- `favoriteIds` is a signal holding an array of product IDs that are favorited.
+- `showFavoritesOnly` toggles the view between all products and only favorites.
+- `favoriteCount` automatically updates when `favoriteIds` changes.
+- `displayedProducts` returns the filtered list based on the toggle.
+- `toggleFavorite` adds or removes an ID using the `update` method.
+- `isFavorite` checks if a product is in the favorites list.
+
+---
+
+## Step 2: Modify `product-list.html` (Template)
+
+Replace the content of `src/app/components/product-list/product-list.html` with the new control flow syntax and favorite UI.
+
+```html
+<div class="header">
+  <h1>Online Store</h1>
+  <span class="favorites-badge">❤️ {{ favoriteCount() }}</span>
+</div>
+
+<div class="view-toggle">
+  <button
+    [class.active]="!showFavoritesOnly()"
+    (click)="showFavoritesOnly.set(false)">
+    All Products
+  </button>
+  <button
+    [class.active]="showFavoritesOnly()"
+    (click)="showFavoritesOnly.set(true)">
+    Favorites
+  </button>
+</div>
+
+<div class="product-grid">
+  @for (product of displayedProducts(); track product.id) {
+    <div class="product-item">
+      <app-product-card [product]="product"></app-product-card>
+      <button
+        class="favorite-btn"
+        [class.is-favorite]="isFavorite(product.id)"
+        (click)="toggleFavorite(product.id)">
+        @if (isFavorite(product.id)) {
+          ❤️
+        } @else {
+          🤍
+        }
+      </button>
+    </div>
+  } @empty {
+    <p class="no-products">No products to display</p>
+  }
+</div>
+```
+
+**Explanation**:
+- The header now shows a favorites counter with a heart.
+- Two buttons toggle the view (All / Favorites). The `[class.active]` highlights the active button.
+- The `@for` loop iterates over `displayedProducts()` and uses `track product.id` (required).
+- Each product card is wrapped in a `div` with a favorite button below it (or beside it – you can adjust CSS).
+- The button shows a filled heart if the product is favorited, otherwise an empty heart.
+- `@empty` handles the case when `displayedProducts()` is empty (e.g., no favorites in favorites view).
+
+---
+
+## Step 3: Add CSS Styling
+
+Add styles to `product-list.css` to make the header, toggle buttons, and favorite button look nice.
+
+```css
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.favorites-badge {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.view-toggle button {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.view-toggle button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.product-item {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-item:hover {
+  transform: scale(1.02);
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.favorite-btn.is-favorite {
+  color: #ff6b6b;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+  background-color: #fff0f0;
+}
+
+.no-products {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+  grid-column: 1 / -1;
+}
+```
+
+**Note**: The favorite button is positioned absolutely at the top-right of each product card. This might overlap with the product image if the card already has its own button. You may need to adjust z-index or move it elsewhere. Alternatively, you can place the button inside the product card component (more work, but cleaner). The choice is yours. If you prefer to put the button inside the card, you would need to add an `@Input()` for `isFavorite` and an `@Output()` for toggle. However, to keep it simple and match the example, we'll keep it outside.
+
+---
+
+## Step 4: Verify and Test
+
+1. **Save all files**.
+2. Run `ng serve` (or use the existing running instance). The app should reload.
+3. Check the new UI:
+   - A favorites badge (heart icon with count) appears in the header.
+   - Two toggle buttons: "All Products" and "Favorites".
+   - Each product card now has a heart button at the top-right (or wherever you positioned it).
+   - Clicking the heart toggles between empty (🤍) and filled (❤️). The counter updates immediately.
+   - Click "Favorites" – only favorited products appear. If none, the `@empty` message shows.
+   - Click "All Products" – all products reappear.
+
+---
+
+## Step 5: Ensure No Errors
+
+- If you see errors about `signal` or `computed`, make sure you imported them from `@angular/core`.
+- If the favorite button doesn't show, check your CSS – the `position: absolute` might need a parent with `position: relative`. The `.product-item` already has `position: relative` in the CSS I provided, so it should work.
+- If the heart symbols don't display correctly, you can use HTML entities: `&#10084;` for filled and `&#9825;` for empty, but the characters (❤️ and 🤍) are fine in modern browsers.
+
+---
+
+## Step 6: Commit and Push
+
+After testing, commit your changes and push to GitHub:
+
+```bash
+git add .
+git commit -m "Add favorites feature with signals and new control flow"
+git push
+```
+
+---
+
+You've now completed the in-class task! Let me know if you run into any issues.

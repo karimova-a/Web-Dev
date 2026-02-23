@@ -1,0 +1,157 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --linkedin-blue: #0A66C2;
+    --linkedin-blue-hover: #004182;
+    --linkedin-light: #EEF3F8;
+    --bg-white: #FFFFFF;
+    --text-dark: #191919;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    --border-color: #E0E0E0;
+    --success-green: #057642;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    flex-direction: column;
+    background-color: var(bg-white);
+    border-bottom: var(--border-dark);
+    width: 100%;
+}
+
+.logo-box{
+    flex: 0;
+    display: flex;
+    background-color: var(--linkedin-blue);
+    color: white ;
+    border-radius:4px;
+    width: 2rem;
+}
+
+input[type="search"]{
+    background-color: lightgray;
+    padding: 10px;
+    width:20rem;
+    border-radius: 15px;
+    border: none;
+}
+
+input[type="search"]:focus{
+    border-color: lightskyblue;
+}
+
+a{
+    color: gray ;
+
+}
+a:hover{
+    color: blue;
+}
+
+.btn-outline{
+    background: none;
+    color: none;
+    border-color: blue ;
+    color: blue ;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+.btn-primary{
+    color:white;
+    background-color: dodgerblue;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+.highlight{
+    color: firebrick;
+}
+
+.divcenter{
+    align-items: center;
+}
+
+#hero{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: antiquewhite;
+}
+
+.hero-text{
+    text-align: center;
+    flex: 45%;
+    align-items: center;
+}
+
+h1{
+    font-size: 2.5rem;
+    line-height: normal;
+}
+
+form{
+    background-color: white;
+    padding: 24px ;
+    border-radius: 10px;
+    box-shadow: #0e3ae8 1px 1px 1px;
+}
+
+label{
+    font-size: 0.5rem;
+    font-weight: bold;
+    text-align: start;
+}
+
+input{
+    border: 1px solid ;
+    border-radius: 5px;
+    width: 100%;
+    padding: 12px;
+}
+
+input:focus{
+    border: 1px solid blue;
+    box-shadow: #0e3ae8 1px 1px 1px;
+}
+
+.forgot-pass{
+    text-align: right;
+    font-size: 0.5rem;
+    font-weight: bold;
+    color: blue;
+}
+
+.btn-primary1{
+    color: blue ;
+    width: 100% ;
+    padding: 50px;
+    border-radius: 28px;
+    font-weight: bold;
+}
+
+.btn-outline1{
+    background: white;
+    border: black ;
+    color: var(--text-dark);
+}
+
+.btn-social{
+    align-items: center;
+    background-color: whitesmoke;
+    border: #0d1117 1px solid;
+
+}
+
