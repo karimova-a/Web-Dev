@@ -1,13 +1,27 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<nav>
-  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
-  <a routerLink="/about" routerLinkActive="active">About</a>
-</nav>
-<router-outlet></router-outlet>
+<div class="app-container">
+  <header>
+    <h1>Online Store</h1>
+  </header>
+
+  <div class="categories">
+    @for (cat of categories; track cat.id) {
+      <button
+        class="category-btn"
+        [class.active]="selectedCategoryId === cat.id"
+        (click)="selectCategory(cat.id)">
+        {{ cat.name }}
+      </button>
+    }
+  </div>
+
+  @if (selectedCategoryId === null) {
+    <div class="welcome">
+      <p>Please select a category to view products.</p>
+    </div>
+  } @else {
+    <app-product-list
+      [products]="filteredProducts"
+      (deleteProduct)="onDeleteProduct($event)">
+    </app-product-list>
+  }
+</div>

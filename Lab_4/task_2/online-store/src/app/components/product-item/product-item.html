@@ -1,20 +1,12 @@
-<div class="card">
-  <!-- Main image with gallery (bonus) -->
-  <img [src]="currentImage" [alt]="product.name" class="product-image">
+<div class="product-card">
+  <img [src]="product.image" [alt]="product.name" class="product-image">
 
-  <!-- Thumbnail gallery (bonus) -->
-  <div class="thumbnail-container" *ngIf="product.images && product.images.length > 0">
-    <img *ngFor="let img of product.images" [src]="img" [alt]="product.name" class="thumbnail" (click)="setImage(img)">
-  </div>
-
-  <!-- Product info (clickable to product page) -->
   <a [href]="product.link" target="_blank" class="product-link">
     <h3>{{ product.name }}</h3>
     <p class="description">{{ product.description }}</p>
     <div class="price">{{ product.price | currency:'KZT':'symbol-narrow':'1.0-0' }}</div>
   </a>
 
-  <!-- Rating stars -->
   <div class="rating">
     <span class="stars">
       <span *ngFor="let star of [1,2,3,4,5]" class="star">
@@ -25,9 +17,14 @@
     <span class="rating-value">{{ product.rating }}</span>
   </div>
 
-  <!-- Share buttons -->
-  <div class="share-buttons">
+  <div class="likes">
+    <span>❤️ {{ likes }}</span>
+  </div>
+
+  <div class="actions">
+    <button class="like-btn" (click)="likeProduct()">Like</button>
     <button class="share-btn whatsapp" (click)="shareWhatsApp(product.link, product.name)">WhatsApp</button>
     <button class="share-btn telegram" (click)="shareTelegram(product.link, product.name)">Telegram</button>
+    <button class="delete-btn" (click)="deleteProduct()">Delete</button>
   </div>
 </div>
